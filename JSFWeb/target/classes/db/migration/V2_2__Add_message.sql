@@ -1,0 +1,1 @@
+insert into hello (message) values ('Hello World!');
