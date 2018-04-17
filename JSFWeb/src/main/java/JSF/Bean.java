@@ -36,6 +36,8 @@ public class Bean {
 			login = property.getProperty("db.login");
 			password = property.getProperty("db.password");
 			
+			inputStream.close();
+			
 			migrate();
 			//System.out.println("url: " + url + ", login: " + login + ", password: " + password);
 		} catch (IOException e) {
