@@ -6,20 +6,17 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
-
-<p:tooltip />
+	
+<f:view>
+    <f:event type="preRenderView" listener="#{bean.migrate}"/>
+    
 <h:head>
 	<title>JSF 2.0 Greeting</title>
 </h:head>
 
 <h:body>
 	<h:form>
-		<p:commandButton value="Migrate DB" update="db"
-			actionListener="#{bean.migrate}" />
-
-		<p:spacer />
-		<p:spacer />
-
+	
 		<h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
 			<h:outputText id="h1" value="События" />
 			<p:spacer />
@@ -30,9 +27,8 @@
 			<h:outputText id="out" value="#{bean1.name}" />
 
 			<p:spacer />
-			<p:spacer />
+			
 			<h:outputText id="h2" value="Привет из бд" />
-
 			<p:commandButton value="Get db message" update="db"
 				actionListener="#{bean.testDatabase}" />
 			<h:outputText id="db" value="#{bean.name}" style="font-weight: bold" />
@@ -40,4 +36,5 @@
 
 	</h:form>
 </h:body>
+</f:view>
 </html>

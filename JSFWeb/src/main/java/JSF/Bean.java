@@ -10,16 +10,36 @@ import javax.faces.bean.SessionScoped;
 
 import org.flywaydb.core.Flyway;
 
+import java.io.*;
+import java.util.Properties;
+
 @ManagedBean
 @SessionScoped
 public class Bean {
 	private String name;
-	private String url = "jdbc:postgresql://localhost:5432/vscale_db";
-	private String login = "qwerty";
-	private String password = "123";
+
+	private String url;
+	private String login;
+	private String password;
 
 	public String getName() {
 		return name;
+	}
+
+	public void GetProperty() {
+		try {
+			InputStream inputStream = getClass().getClassLoader().getResourceAsStream("config.properties");
+			Properties property = new Properties();
+			property.load(inputStream);
+
+			url = property.getProperty("db.url");
+			login = property.getProperty("db.login");
+			password = property.getProperty("db.password");
+
+			//System.out.println("url: " + url + ", login: " + login + ", password: " + password);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void testDatabase() {
@@ -44,16 +64,17 @@ public class Bean {
 			e.printStackTrace();
 		}
 	}
-	
-	public void migrate() {
-        try {       
-            Flyway flyway = new Flyway();
 
-            flyway.setDataSource("jdbc:postgresql://localhost:5432/vscale_db", "qwerty", "123");
-            
-            flyway.migrate();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
+	public void migrate() {
+		try {
+			GetProperty();
+			Flyway flyway = new Flyway();
+
+			flyway.setDataSource(url, login, password);
+
+			flyway.migrate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
