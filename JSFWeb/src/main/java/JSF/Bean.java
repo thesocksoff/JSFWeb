@@ -68,7 +68,7 @@ public class Bean {
 		}
 	}
 
-	public void migrate() {
+	private void migrate() {
 		try {
 			Flyway flyway = new Flyway();
 
