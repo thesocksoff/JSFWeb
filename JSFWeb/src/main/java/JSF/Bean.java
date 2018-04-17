@@ -47,8 +47,6 @@ public class Bean {
 
 	public void testDatabase() {
 		try {
-			Class.forName("org.postgresql.Driver");
-
 			Connection con = DriverManager.getConnection(url, login, password);
 			try {
 				Statement stmt = con.createStatement();
