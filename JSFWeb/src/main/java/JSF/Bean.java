@@ -35,7 +35,8 @@ public class Bean {
 			url = property.getProperty("db.url");
 			login = property.getProperty("db.login");
 			password = property.getProperty("db.password");
-
+			
+			migrate();
 			//System.out.println("url: " + url + ", login: " + login + ", password: " + password);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -67,7 +68,6 @@ public class Bean {
 
 	public void migrate() {
 		try {
-			GetProperty();
 			Flyway flyway = new Flyway();
 
 			flyway.setDataSource(url, login, password);
