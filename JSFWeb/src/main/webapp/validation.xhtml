@@ -12,9 +12,21 @@
 </h:head>
 
 <h:body>
-	<h:panelGrid columns="2" id="pass" cellpadding="2">
-		<h:outputText value="Password: " />
-		<p:password id="nonFeedback" value="#{getInfo.password}" />
-	</h:panelGrid>
+	<h:form>
+		<p:growl id="growl" life="2000" />
+
+		<h:panelGrid columns="2" id="pass" cellpadding="5">
+			<p:outputLabel value="Login: " />
+			<p:inputText id="log" value="#{getInfo.login}" />
+
+			<h:outputText value="Password: " />
+			<p:password id="pas" value="#{getInfo.password}" />
+
+			<p:commandButton value="Login" id="login" update="growl"
+				actionListener="#{getInfo.loginAction}" />
+				
+			<h:commandButton action="#{getInfo.getValidate}" value="SUCSESS" />
+		</h:panelGrid>
+	</h:form>
 </h:body>
 </html>

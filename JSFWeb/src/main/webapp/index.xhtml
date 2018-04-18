@@ -16,11 +16,6 @@
 
 	<h:body>
 		<h:form>
-		     <!-- <f:websocket channel="flywayStart" scope="view">
-				<f:ajax event="flywayMigrate" listener="#{bean.Migrate}"/>
-			</f:websocket> -->
-
-
 			<h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
 				<h:outputText id="h1" value="События" />
 				<p:spacer />
@@ -35,7 +30,8 @@
 				<h:outputText id="h2" value="Привет из бд" />
 				<p:commandButton value="Get db message" update="dataBase"
 					actionListener="#{bean.testDatabase}" />
-				<h:outputText id="dataBase" value="#{bean.name}" style="font-weight: bold" />
+				<h:outputText id="dataBase" value="#{bean.name}"
+					style="font-weight: bold" />
 			</h:panelGrid>
 
 		</h:form>
