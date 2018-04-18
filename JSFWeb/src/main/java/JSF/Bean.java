@@ -9,7 +9,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import org.flywaydb.core.Flyway;
-
 import java.io.*;
 import java.util.Properties;
 
@@ -25,7 +24,7 @@ public class Bean {
 	public String getName() {
 		return name;
 	}
-
+	
 	public void GetProperty() {
 		try {
 			InputStream inputStream = getClass().getClassLoader().getResourceAsStream("config.properties");
@@ -35,10 +34,10 @@ public class Bean {
 			url = property.getProperty("db.url");
 			login = property.getProperty("db.login");
 			password = property.getProperty("db.password");
-			
 			inputStream.close();
 			
 			migrate();
+
 			//System.out.println("url: " + url + ", login: " + login + ", password: " + password);
 		} catch (IOException e) {
 			e.printStackTrace();
