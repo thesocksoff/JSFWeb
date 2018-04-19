@@ -6,7 +6,6 @@
 
 	<display-name>JSF</display-name>
 	<welcome-file-list>
-	
 		<welcome-file>faces/validation.xhtml</welcome-file>
 	</welcome-file-list>
 	<servlet>

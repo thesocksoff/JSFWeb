@@ -21,11 +21,8 @@
 
 			<h:outputText value="Password: " />
 			<p:password id="pas" value="#{getInfo.password}" />
-
-			<p:commandButton value="Login" id="login" update="growl"
-				actionListener="#{getInfo.loginAction}" />
 				
-			<h:commandButton action="#{getInfo.getValidate}" value="SUCSESS" />
+			<p:commandButton  action="#{getInfo.getValidate}" value="Login" />
 		</h:panelGrid>
 	</h:form>
 </h:body>
