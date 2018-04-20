@@ -1,10 +1,15 @@
 package authorization;
 
-import javax.faces.bean.ManagedBean;
+import javax.faces.application.Application;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.bean.*;
+import javax.faces.event.*;
+
+import org.apache.commons.codec.binary.Base64;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -12,8 +17,11 @@ import java.sql.Statement;
 import java.util.Properties;
 
 @ManagedBean
-public class getInfo implements Serializable {
-	private boolean success = false;
+@SessionScoped
+public class getInfo implements SystemEventListener {
+	private static boolean success = false;
+
+	private String result;
 
 	private String login;
 	private String password;
@@ -22,7 +30,22 @@ public class getInfo implements Serializable {
 	private String dlogin;
 	private String dpassword;
 
-	private static final long serialVersionUID = 1L;
+	@Override
+	public void processEvent(SystemEvent event) throws AbortProcessingException {
+		if (event instanceof PreDestroyApplicationEvent) {
+			success = false;
+			durl = null;
+			dlogin = null;
+			dpassword = null;
+			login = null;
+			password = null;
+		}
+	}
+
+	@Override
+	public boolean isListenerForSource(Object source) {
+		return source instanceof Application;
+	}
 
 	public void GetProperty() {
 		try {
@@ -50,17 +73,19 @@ public class getInfo implements Serializable {
 				ResultSet rs = stmt.executeQuery("SELECT name, password FROM users");
 
 				System.out.println("Select table ... ok");
-				System.out.println("login " + name + " ... ok");
+
 				while (rs.next()) {
 					String names = rs.getString("name");
-					
 					String passwords = rs.getString("password");
-					
-					System.out.println(names + "	" + passwords + " ... ok");
+
 					if (names.equals(name) && passwords.equals(password)) {
 						success = true;
-						System.out.println("Validate ... ok");
-					}
+						System.out.println(names + "	" + passwords + " ... ok");
+
+						System.out.println("Validate ... " + success);
+						break;
+					} else
+						result = "Incorect data";
 				}
 
 				rs.close();
@@ -72,16 +97,22 @@ public class getInfo implements Serializable {
 			e.printStackTrace();
 		}
 	}
-	
-	public String checkState() 
-	{
-		if(!success) return "validation.xhtml";
-		
-		return null;
+
+	public void checkState() throws IOException {
+		if (!success) {
+			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+			ec.redirect(ec.getRequestContextPath() + "/validation.xhtml");
+
+			System.out.println("index ... " + success);
+		}
 	}
 
 	public String getLogin() {
 		return login;
+	}
+
+	public String getResult() {
+		return result;
 	}
 
 	public void setLogin(String login) {
@@ -98,10 +129,13 @@ public class getInfo implements Serializable {
 
 	public String getValidate() {
 		GetProperty();
+		password = new String(com.sun.org.apache.xml.internal.security.utils.Base64.encode(password.getBytes()));
+
 		checkUser(login, password);
+
 		if (success)
 			return "success";
-
-		return "";
+		else
+			return "fail";
 	}
 }

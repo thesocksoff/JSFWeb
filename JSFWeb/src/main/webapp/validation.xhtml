@@ -21,9 +21,11 @@
 
 			<h:outputText value="Password: " />
 			<p:password id="pas" value="#{getInfo.password}" />
-				
-			<p:commandButton  action="#{getInfo.getValidate}" value="Login" />
+
+			<p:commandButton action="#{getInfo.getValidate}" update="login" value="Login" />
+			<p:outputLabel id="login" value="#{getInfo.result}" />
 		</h:panelGrid>
+		<p:separator />
 	</h:form>
 </h:body>
 </html>

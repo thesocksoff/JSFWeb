@@ -3,12 +3,19 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_2.xsd"
 	version="2.2">
-	
+
 	<application>
+			<application>
 		<system-event-listener>
 		   <system-event-class> javax.faces.event.PostConstructApplicationEvent </system-event-class>
 			<system-event-listener-class>JSF.Bean</system-event-listener-class>
 		</system-event-listener>
+		
+		<system-event-listener>
+            <system-event-listener-class>authorization.getInfo</system-event-listener-class>
+            <system-event-class>javax.faces.event.PreDestroyApplicationEvent</system-event-class>
+        </system-event-listener>
+	</application>
 	</application>
 
 	<navigation-rule>
