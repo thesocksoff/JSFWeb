@@ -1,12 +1,10 @@
 package authorization;
 
-import javax.faces.application.Application;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.faces.bean.*;
-import javax.faces.event.*;
-
-import org.apache.commons.codec.binary.Base64;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,10 +16,9 @@ import java.util.Properties;
 
 @ManagedBean
 @SessionScoped
-public class getInfo implements SystemEventListener {
-	private static boolean success = false;
+public class getInfo {
 
-	private String result;
+	private String message;
 
 	private String login;
 	private String password;
@@ -29,23 +26,6 @@ public class getInfo implements SystemEventListener {
 	private String durl;
 	private String dlogin;
 	private String dpassword;
-
-	@Override
-	public void processEvent(SystemEvent event) throws AbortProcessingException {
-		if (event instanceof PreDestroyApplicationEvent) {
-			success = false;
-			durl = null;
-			dlogin = null;
-			dpassword = null;
-			login = null;
-			password = null;
-		}
-	}
-
-	@Override
-	public boolean isListenerForSource(Object source) {
-		return source instanceof Application;
-	}
 
 	public void GetProperty() {
 		try {
@@ -64,9 +44,14 @@ public class getInfo implements SystemEventListener {
 		}
 	}
 
-	public void checkUser(String name, String password) {
+	public void tryConnect() throws IOException, ServletException {
+		System.out.println("servlet ... ok");
+		FacesContext context = FacesContext.getCurrentInstance();
+		GetProperty();
+
 		try {
 			Connection con = DriverManager.getConnection(durl, dlogin, dpassword);
+
 			System.out.println("Connect ... ok");
 			try {
 				Statement stmt = con.createStatement();
@@ -74,20 +59,28 @@ public class getInfo implements SystemEventListener {
 
 				System.out.println("Select table ... ok");
 
+				password = new String(
+						com.sun.org.apache.xml.internal.security.utils.Base64.encode(password.getBytes()));
+
 				while (rs.next()) {
-					String names = rs.getString("name");
+					String logins = rs.getString("name");
 					String passwords = rs.getString("password");
 
-					if (names.equals(name) && passwords.equals(password)) {
-						success = true;
-						System.out.println(names + "	" + passwords + " ... ok");
+					if (logins.equals(login) && passwords.equals(password)) {
+						System.out.println(logins + "	" + passwords + " ... ok");
 
-						System.out.println("Validate ... " + success);
-						break;
-					} else
-						result = "Incorect data";
+						context.getExternalContext().getSessionMap().put("user", login);
+
+						System.out.println("Validate ... ok");
+
+						context.getExternalContext().redirect("index.xhtml");
+
+					} else {
+						// Send an error message on Login Failure
+						message = "Authentication Failed. Check username or password.";
+
+					}
 				}
-
 				rs.close();
 				stmt.close();
 			} finally {
@@ -98,21 +91,12 @@ public class getInfo implements SystemEventListener {
 		}
 	}
 
-	public void checkState() throws IOException {
-		if (!success) {
-			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-			ec.redirect(ec.getRequestContextPath() + "/validation.xhtml");
-
-			System.out.println("index ... " + success);
-		}
-	}
-
 	public String getLogin() {
 		return login;
 	}
 
-	public String getResult() {
-		return result;
+	public String getMessage() {
+		return message;
 	}
 
 	public void setLogin(String login) {
@@ -125,17 +109,5 @@ public class getInfo implements SystemEventListener {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getValidate() {
-		GetProperty();
-		password = new String(com.sun.org.apache.xml.internal.security.utils.Base64.encode(password.getBytes()));
-
-		checkUser(login, password);
-
-		if (success)
-			return "success";
-		else
-			return "fail";
 	}
 }
