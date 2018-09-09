@@ -6,35 +6,31 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
-	
-<f:view>
-    <f:event type="preRenderView" listener="#{bean.GetProperty}"/>
-    
-<h:head>
-	<title>JSF 2.0 Greeting</title>
-</h:head>
 
-<h:body>
-	<h:form>
-	
-		<h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
-			<h:outputText id="h1" value="События" />
-			<p:spacer />
+	<h:head>
+		<title>JSF 2.0 Greeting</title>
+	</h:head>
 
-			<h:inputText id="firstname" value="#{bean1.name}">
-				<p:ajax update="out" event="keyup" />
-			</h:inputText>
-			<h:outputText id="out" value="#{bean1.name}" />
+	<h:body>
+		<h:form>
+			<h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
+				<h:outputText id="h1" value="События" />
+				<p:spacer />
 
-			<p:spacer />
-			
-			<h:outputText id="h2" value="Привет из бд" />
-			<p:commandButton value="Get db message" update="db"
-				actionListener="#{bean.testDatabase}" />
-			<h:outputText id="db" value="#{bean.name}" style="font-weight: bold" />
-		</h:panelGrid>
+				<h:inputText id="firstName" value="#{bean1.name}">
+					<p:ajax update="out" event="keyup" />
+				</h:inputText>
+				<h:outputText id="out" value="#{bean1.name}" />
 
-	</h:form>
-</h:body>
-</f:view>
+				<p:spacer />
+
+				<h:outputText id="h2" value="Привет из бд" />
+				<p:commandButton value="Get db message" update="dataBase"
+					actionListener="#{bean.testDatabase}" />
+				<h:outputText id="dataBase" value="#{bean.name}"
+					style="font-weight: bold" />
+			</h:panelGrid>
+
+		</h:form>
+	</h:body>
 </html>

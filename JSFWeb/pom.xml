@@ -30,9 +30,10 @@
 		</dependency>
 
 		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-			<version>2.1</version>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -64,31 +65,21 @@
 			<artifactId>maven-compiler-plugin</artifactId>
 			<version>3.7.0</version>
 		</dependency>
+
 		<dependency>
 			<groupId>postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>9.1-901-1.jdbc4</version>
 		</dependency>
+
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.10</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<finalName>JSFWeb</finalName>
-		<!---
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.flywaydb</groupId>
-					<artifactId>flyway-maven-plugin</artifactId>
-					<version>5.0.7</version>
-					<configuration>
-						<driver>org.postgresql.Driver</driver>
-						<user>qwerty</user>
-						<password>123</password>
-						<url>jdbc:postgresql://localhost:5432/vscale_db</url>
-						<baseDir>db/migration</baseDir>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-		-->
 	</build>
 </project>

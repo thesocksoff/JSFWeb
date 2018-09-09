@@ -1,0 +1,1 @@
+insert into users (id, name, password ) values (1, 'qwerty', '123');

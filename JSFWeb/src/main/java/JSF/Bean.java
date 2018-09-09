@@ -5,27 +5,41 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.*;
+import javax.faces.application.Application;
+import javax.faces.event.*;
 
 import org.flywaydb.core.Flyway;
-
 import java.io.*;
 import java.util.Properties;
 
 @ManagedBean
 @SessionScoped
-public class Bean {
+public class Bean implements SystemEventListener{
 	private String name;
 
 	private String url;
 	private String login;
 	private String password;
 
+    @Override
+    public void processEvent(SystemEvent event) throws AbortProcessingException {
+        if (event instanceof PostConstructApplicationEvent){
+            System.out.println("post initialize application");
+            GetProperty();
+            migrate();
+        }
+    }
+
+    @Override
+    public boolean isListenerForSource(Object source) {
+        return source instanceof Application;
+    }
+	
 	public String getName() {
 		return name;
 	}
-
+ 
 	public void GetProperty() {
 		try {
 			InputStream inputStream = getClass().getClassLoader().getResourceAsStream("config.properties");
@@ -35,10 +49,8 @@ public class Bean {
 			url = property.getProperty("db.url");
 			login = property.getProperty("db.login");
 			password = property.getProperty("db.password");
-			
 			inputStream.close();
-			
-			migrate();
+
 			//System.out.println("url: " + url + ", login: " + login + ", password: " + password);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -47,6 +59,7 @@ public class Bean {
 
 	public void testDatabase() {
 		try {
+			GetProperty() ;
 			Connection con = DriverManager.getConnection(url, login, password);
 			try {
 				Statement stmt = con.createStatement();
